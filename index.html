@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موسوعة سير الصحابة رضوان الله عليهم</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f6f8; margin: 0; padding: 20px; color: #333; }
+        header { text-align: center; margin-bottom: 30px; }
+        h1 { color: #1b4332; margin-bottom: 10px; }
+        
+        /* البحث */
+        .search-container { text-align: center; margin-bottom: 25px; }
+        .search-container input {
+            width: 80%; max-width: 400px; padding: 12px;
+            border: 2px solid #2d6a4f; border-radius: 8px; font-size: 16px;
+        }
+
+        /* حاوي المحتوى */
+        .main-container { display: flex; flex-wrap: wrap; gap: 20px; max-width: 1000px; margin: 0 auto; }
+        
+        /* قائمة الأسماء */
+        .companions-list {
+            flex: 1; min-width: 250px; background: #ffffff;
+            border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            max-height: 500px; overflow-y: auto;
+        }
+        .companion-item {
+            padding: 12px; border-bottom: 1px solid #eee; cursor: pointer;
+            transition: background 0.2s; border-radius: 4px;
+        }
+        .companion-item:hover { background-color: #d8f3dc; }
+
+        /* بطاقة التفاصيل */
+        .companion-details {
+            flex: 2; min-width: 300px; background: #ffffff;
+            border-radius: 8px; padding: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .companion-details h2 { color: #2d6a4f; border-bottom: 2px solid #2d6a4f; padding-bottom: 8px; }
+        .info-section { margin-bottom: 15px; }
+        .info-title { font-weight: bold; color: #1b4332; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>موسوعة سير الصحابة رضوان الله عليهم</h1>
+        <p>اضغط على اسم الصحابي لعرض تفاصيل سيرته وإنجازاته</p>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" onkeyup="searchCompanion()" placeholder="ابحث عن اسم الصحابي...">
+    </div>
+
+    <div class="main-container">
+        <!-- قائمة الأسماء -->
+        <div class="companions-list" id="list">
+            <!-- سيتم إضافة الأسماء تلقائياً -->
+        </div>
+
+        <!-- عرض البيانات -->
+        <div class="companion-details" id="details">
+            <h2 id="name">اختر صحابياً من القائمة</h2>
+            <div class="info-section"><span class="info-title">الولادة: </span><span id="birth">-</span></div>
+            <div class="info-section"><span class="info-title">الإسلام: </span><span id="islam">-</span></div>
+            <div class="info-section"><span class="info-title">أبرز الإنجازات وما قدمه للإسلام: </span><p id="achievements">-</p></div>
+            <div class="info-section"><span class="info-title">الوفاة: </span><span id="death">-</span></div>
+        </div>
+    </div>
+
+    <script>
+        // قاعدة البيانات (يمكنك إضافة صحابة جدد هنا بسهولة)
+        const companions = [
+            {
+                id: 1,
+                name: "أبو بكر الصديق (عبد الله بن أبي قحافة)",
+                birth: "بعد عام الفيل بسنتين وستة أشهر (تقريباً 573 م)",
+                islam: "أول من أسلم من الرجال الأحرار",
+                achievements: "جمع القرآن الكريم، محاربة المرتدين مانعي الزكاة، تسيير جيش أسامة بن زيد، وتثبيت الأمة بعد وفاة النبي ﷺ.",
+                death: "13 هـ (عن عمر يناهز 63 سنة) ودفن بجوار النبي ﷺ"
+            },
+            {
+                id: 2,
+                name: "عمر بن الخطاب (الفاروق)",
+                birth: "بعد عام الفيل بثلاث عشرة سنة (تقريباً 586 م)",
+                islam: "السنة الخامسة أو السادسة من البعثة النبوية",
+                achievements: "تأسيس التاريخ الهجري، إنشاء الدواوين، فتح الشام ومصر والعراق وفارس، وإقامة العدل وتنظيم الدولة الإسلامية.",
+                death: "23 هـ (استشهد في المحراب على يد أبو لؤلؤة المجوسي)"
+            },
+            {
+                id: 3,
+                name: "عثمان بن عفان (ذو النورين)",
+                birth: "بعد عام الفيل بست سنين (تقريباً 576 م)",
+                islam: "أسلم في أول الإسلام على يد أبي بكر الصديق",
+                achievements: "جمع المصحف على قراءة واحدة (المصحف العثماني)، تجهيز جيش العسرة، وشراء بئر روما وجعلها وقفاً للمسلمين.",
+                death: "35 هـ (استشهد بعد فتنة جائرة وهو يقرأ القرآن)"
+            },
+            {
+                id: 4,
+                name: "علي بن أبي طالب",
+                birth: "قبل البعثة النبوية بعشر سنين",
+                islam: "أول من أسلم من الصبيان (وكان عمره 10 سنوات)",
+                achievements: "الفداء بالنفس والبيت في فراش النبي ﷺ ليلة الهجرة، البطولات في كل الغزوات (مثل خيبر وبدر)، وإثراء العلوم والفصاحة.",
+                death: "40 هـ (استشهد على يد عبد الرحمن بن ملجم)"
+            },{
+    id: 5,
+    name: "الزبير بن العوام",
+    birth: "قبل الهجرة بـ 28 سنة (تقريباً 594 م)",
+    islam: "أسلم وهو ابن إحدى عشرة سنة (من الأوائل)",
+    achievements: "حواري رسول الله ﷺ، أول من سل سيفاً في الإسلام، وشهد جميع المشاهد مع النبي.",
+    death: "36 هـ (في واقعة الجمل)"
+}
+
+        ];
+
+        // عرض الأسماء في القائمة
+        function loadList() {
+            const listDiv = document.getElementById('list');
+            listDiv.innerHTML = '';
+            companions.forEach(c => {
+                const item = document.createElement('div');
+                item.className = 'companion-item';
+                item.innerText = c.name;
+                item.onclick = () => showDetails(c.id);
+                listDiv.appendChild(item);
+            });
+        }
+
+        // عرض بيانات الصحابي المحدد
+        function showDetails(id) {
+            const c = companions.find(item => item.id === id);
+            if (c) {
+                document.getElementById('name').innerText = c.name;
+                document.getElementById('birth').innerText = c.birth;
+                document.getElementById('islam').innerText = c.islam;
+                document.getElementById('achievements').innerText = c.achievements;
+                document.getElementById('death').innerText = c.death;
+            }
+        }
+
+        // البحث
+        function searchCompanion() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const items = document.getElementsByClassName('companion-item');
+            
+            for (let i = 0; i < items.length; i++) {
+                let name = items[i].innerText;
+                if (name.toLowerCase().includes(input)) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        // تشغيل القائمة عند فتح الصفحة
+        loadList();
+    </script>
+</body>
+</html>
